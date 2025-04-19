@@ -19,6 +19,10 @@ int main(int argc, char *argv[])
     Graphics graphics;
     graphics.init();
 
+    SDL_Texture* backgroundTexture = graphics.loadTexture("space.png");
+    SDL_Texture* mouseTexture = graphics.loadTexture("planet03.png");
+    SDL_Texture* enemyTexture = graphics.loadTexture("planet02.png");
+
     Mouse mouse;
     mouse.x = SCREEN_WIDTH / 2;
     mouse.y = SCREEN_HEIGHT / 2;
@@ -26,12 +30,14 @@ int main(int argc, char *argv[])
     std::vector <Enemy> enemies;
 
     int spawnTimer = 0;
-    const int spawnDelay = 20;
+    const int spawnDelay = 50;
 
     bool quit = false;
     SDL_Event event;
     while (!quit) {
         graphics.prepareScene();
+        SDL_RenderCopy(graphics.renderer, backgroundTexture, nullptr, nullptr);
+        render(mouse, mouseTexture, graphics);
 
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_QUIT) quit = true;
@@ -66,20 +72,20 @@ int main(int argc, char *argv[])
 
             float enemySpeed = 2.0f + static_cast<float>(rand() % 2) / 2.0f;
 
-            enemies.push_back(Enemy(ex, ey, mouse.x, mouse.y, enemySpeed));
+            enemies.push_back(Enemy(ex, ey, mouse.x, mouse.y, enemySpeed));;
         }
 
 
         for (auto& enemy : enemies) {
             enemy.move();
-            if (enemy.checkCollision(mouse.getX(), mouse.getY(), 10)) {
+            if (enemy.checkCollision(mouse.getX(), mouse.getY(), PLAYER_SIZE)) {
                 std::cout << "Game Over!";
                 quit = true;
             }
         }
 
         for (auto& enemy : enemies) {
-            enemy.render(graphics.renderer);
+            enemy.render(enemyTexture, graphics);
         }
 
          enemies.erase(std::remove_if(enemies.begin(), enemies.end(), [](const Enemy& e) {
@@ -87,11 +93,13 @@ int main(int argc, char *argv[])
                    e.y < -e.size || e.y > SCREEN_HEIGHT + e.size;
         }), enemies.end());
 
-        render(mouse, graphics);
-
         graphics.presentScene();
         SDL_Delay(16);
     }
+
+    SDL_DestroyTexture(backgroundTexture);
+    SDL_DestroyTexture(mouseTexture);
+    SDL_DestroyTexture(enemyTexture);
 
     graphics.quit();
     return 0;

@@ -3,6 +3,7 @@
 #define ENTITY_H
 
 #include "defs.h"
+#include "graphics.h"
 #include <SDL.h>
 #include <cstdlib>
 
@@ -11,6 +12,7 @@ struct Entity {
     float dx, dy;
     float speed;
     double size = ENTITY_SIZE;
+    SDL_Texture* texture = nullptr;
 
     Entity(int startX, int startY, float directionX, float directionY, float startSpeed)
         : x(startX), y(startY), dx(directionX), dy(directionY), speed(startSpeed) {}
@@ -20,10 +22,15 @@ struct Entity {
         y += dy * speed;
     }
 
-    void render(SDL_Renderer* renderer) {
-        SDL_Rect rect = {x, y, size, size};
-        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-        SDL_RenderFillRect(renderer, &rect);
+    void render(SDL_Texture* texture, const Graphics& graphics) {
+        SDL_Rect rect = { x, y, (int)size, (int)size };
+
+        if (texture) {
+            SDL_RenderCopy(graphics.renderer, texture, nullptr, &rect);
+        } else {
+            SDL_SetRenderDrawColor(graphics.renderer, 255, 0, 0, 255);
+            SDL_RenderFillRect(graphics.renderer, &rect);
+        }
     }
 
      bool checkCollision(int playerX, int playerY, int playerSize) {
