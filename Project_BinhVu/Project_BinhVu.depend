@@ -1,0 +1,37 @@
+# depslib dependency file v1.0
+1746368338 source:d:\laptrinhnangcao\project_binhvu\main.cpp
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	<vector>
+	<cstdlib>
+	<ctime>
+	<algorithm>
+	"graphics.h"
+	"defs.h"
+	"game.h"
+	"render.h"
+	"entity.h"
+
+1746368338 d:\laptrinhnangcao\project_binhvu\graphics.h
+	<SDL.h>
+	<SDL_image.h>
+	"defs.h"
+
+1746368338 d:\laptrinhnangcao\project_binhvu\defs.h
+
+1746368338 d:\laptrinhnangcao\project_binhvu\game.h
+	"defs.h"
+	<cmath>
+
+1746368382 d:\laptrinhnangcao\project_binhvu\render.h
+	"graphics.h"
+	"game.h"
+	"defs.h"
+
+1746368338 d:\laptrinhnangcao\project_binhvu\entity.h
+	"defs.h"
+	"graphics.h"
+	<SDL.h>
+	<cstdlib>
+
